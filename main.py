@@ -19,7 +19,7 @@ f = Function(lambda x: x**2 if x < 0 else 1)
 
 plt.plot(interval, [f(k) for k in interval])
 
-part_sum = get_fourier_partial_series(f, 20)
+part_sum = FourierTransformation.get_fourier_partial_series(f, 40)
 
 plt.plot(interval, [part_sum(k) for k in interval])
 plt.show()
