@@ -1,7 +1,14 @@
 # fourier_series_visualize
 This small project shows how partial sums of fourier series approximate given function.<br>
-Also this project provides Function class, which presents intuitive and easy way to handle functions. 
+Also this project provides Function class, which presents intuitive and easy way to handle functions. <br>
+```
+sin = Function( math.sin )
+cos = Function( math.cos )
+x = Function( lambda t: t )
 
+f = sin(cos(x*x)) + sin(x) + 3 # f(x) = sin(cos(x^2)) + sin(x) + 3
+print(f(2), cos(4))            # sin(cos(2*2)) + sin(2) + 3 ≈ sin(-0.654) + 0.909 + 3 ≈ 3.3012144171849163
+```
 ## Some samples
 ### f(x) = x
 For N = 3 <br>
