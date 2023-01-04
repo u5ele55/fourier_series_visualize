@@ -1,16 +1,50 @@
-from .operation import Operation
+class Operation:
+    MLT = 1
+    PLUS = 2
+    MINUS = 3
+    COMPOSE = 4
+    DIV = 5
+
+    @staticmethod
+    def eval(subFunction, x: float):
+        operation = subFunction.operation
+        f1 = subFunction.left
+        f2 = subFunction.right
+        m = {
+            Operation.MLT: lambda g,h: g(x) * h(x),
+            Operation.PLUS: lambda g,h: g(x) + h(x),
+            Operation.MINUS: lambda g,h: g(x) - h(x),
+            Operation.COMPOSE: lambda g,h: g(h(x)),
+            Operation.DIV: lambda g,h: g(x) / h(x),
+        }
+        assert operation in m.keys(), "Invalid operation"
+        return m[operation](f1, f2)
+    
+    @staticmethod
+    def symbol(operation):
+        m = {
+            Operation.MLT: '*',
+            Operation.PLUS: ' + ',
+            Operation.MINUS: ' - ',
+            Operation.COMPOSE: '(',
+            Operation.DIV: ' / ',
+        }
+        assert operation in m.keys(), "Invalid operation"
+        return m[operation]
+        
 
 class Function:
     def __init__(self,
-                 func=None,
-                 operation=0,
-                 left=None,
-                 right=None,
-                 label=""):
+                 func = None,
+                 operation = 0,
+                 left = None,
+                 right = None,
+                 label = ""):
         self.func = func #only for leafs
         self.operation = operation
         self.left = left
         self.right = right
+        
         self.label = label
 
     def __rmul__(self, other):
@@ -28,7 +62,10 @@ class Function:
     def __sub__(self, other):
         other = Utilities.transformToFunction(other)
         return Function(None, Operation.MINUS, self, other)
-    def __div__(self, other):
+    def __rtruediv__(self, other):
+        other = Utilities.transformToFunction(other)
+        return other.__truediv__(self)
+    def __truediv__(self, other):
         other = Utilities.transformToFunction(other)
         return Function(None, Operation.DIV, self, other)
     def __neg__(self):
@@ -43,11 +80,28 @@ class Function:
     def __evalRecursive(self, x, function):
         if function.left == None and function.right == None:
             return self.func(x)
-        assert (function.left != None and function.right != None),"Operation tree constructed poorly!"
+        assert (function.left != None and function.right != None), "Operation tree constructed poorly!"
         return Operation.eval(function, x)
 
     def __str__(self):
-        return f"<Function name='{self.label}', left={self.left}, right={self.right}, op={self.operation}>"
+        return Function.__toStr(self)
+
+    @staticmethod
+    def __toStr(node):
+        collectedStr = '' 
+        if node.left == None and node.right == None:
+            return node.label
+        
+        if node.left: 
+            collectedStr += Function.__toStr(node.left)
+        collectedStr += Operation.symbol(node.operation)
+        if node.right: 
+            collectedStr += Function.__toStr(node.right)
+        
+        if node.operation is Operation.COMPOSE: 
+            collectedStr += ')'
+        return collectedStr
+
     
 
 import types
@@ -59,7 +113,11 @@ class Utilities:
     def transformToFunction(x):
         if isinstance(x, Function): return x
         if Utilities.isNum(x):
-            return Function(func=lambda _: x)
-        if isinstance(x, types.FunctionType):
-            return Function(func=x)
+            return Function(func=lambda _: x, label=str(x))
+        if isinstance(x, types.FunctionType): 
+            genLabel = ""
+            return Function(func=x, label=genLabel)
+        if '<built-in function' in str(x):
+            genLabel = str(x).replace('<built-in function ', '')[:-1]
+            return Function(func=x, label=genLabel)
         
