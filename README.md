@@ -27,7 +27,10 @@ For N = 4 <br>
 For N = 20 <br>
  ![x_sinxx_20](https://user-images.githubusercontent.com/99137907/210859021-549289d5-ff6e-4331-8181-864dd1efa63f.png)
  <br>
-
+### f(x) = |x| ^ sin(x)
+ ![abs(x)^sinx](https://user-images.githubusercontent.com/99137907/214661663-65a53106-f03d-4a9b-afaf-5d1830b571fd.png)
+ <br>
+ 
 ## Interaction
 On start, there is a list of functions to work with. You can extend this list by adding functions to `funcs` list in `cli/function_catalogue.py` file. <br>
 By providing N - top bound of partial fourier sum, you'll get graphs of initial function and partial fourier sum on top of it. By closing graph you'll be able to enter N again. <br> 
