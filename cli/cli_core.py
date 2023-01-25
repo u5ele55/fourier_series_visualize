@@ -30,6 +30,7 @@ class CLICore:
             part_sum = transformator.get_fourier_partial_series(func, N)
             
             print("\tDrawing plot...")
-            plotCreator.showPlot(part_sum)  
+            plotCreator.addFunction(part_sum, f"N = {N}")
+            plotCreator.showPlot()  
 
         print("Terminating...")

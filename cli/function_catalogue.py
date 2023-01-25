@@ -6,7 +6,7 @@ class CLIFunctionCatalogue:
         print("You can choose one function from this list:")
         funcs = [ 
             x, x*x, x*sin(x), ln(x*x + x + 2), x + sin(2*x), 
-            x+math.acos, sin(x) / x, sin(x*x)
+            x+math.acos, sin(x) / x, sin(x*x), math.e ** (-x**2)
         ]
 
         ind = 0

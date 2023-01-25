@@ -4,6 +4,7 @@ class Operation:
     MINUS = 3
     COMPOSE = 4
     DIV = 5
+    POWER = 6
 
     @staticmethod
     def eval(subFunction, x: float):
@@ -16,6 +17,7 @@ class Operation:
             Operation.MINUS: lambda g,h: g(x) - h(x),
             Operation.COMPOSE: lambda g,h: g(h(x)),
             Operation.DIV: lambda g,h: g(x) / h(x),
+            Operation.POWER: lambda g,h: g(x) ** h(x),
         }
         assert operation in m.keys(), "Invalid operation"
         return m[operation](f1, f2)
@@ -28,6 +30,7 @@ class Operation:
             Operation.MINUS: ' - ',
             Operation.COMPOSE: '(',
             Operation.DIV: ' / ',
+            Operation.POWER: ' ** '
         }
         assert operation in m.keys(), "Invalid operation"
         return m[operation]
@@ -47,6 +50,11 @@ class Function:
         
         self.label = label
 
+    def real(self):
+        return Function(lambda t: self(t).real, label = f'Re(self.label)' if self.label else self.label)
+    def imag(self):
+        return Function(lambda t: self(t).imag, label = f'Im(self.label)' if self.label else self.label)
+
     def __rmul__(self, other):
         return self.__mul__(other)
     def __mul__(self, other):
@@ -62,6 +70,12 @@ class Function:
     def __sub__(self, other):
         other = Utilities.transformToFunction(other)
         return Function(None, Operation.MINUS, self, other)
+    def __rpow__(self, other):
+        other = Utilities.transformToFunction(other)
+        return Function(None, Operation.POWER, other, self)
+    def __pow__(self, other):
+        other = Utilities.transformToFunction(other)
+        return Function(None, Operation.POWER, self, other)
     def __rtruediv__(self, other):
         other = Utilities.transformToFunction(other)
         return other.__truediv__(self)
@@ -69,7 +83,7 @@ class Function:
         other = Utilities.transformToFunction(other)
         return Function(None, Operation.DIV, self, other)
     def __neg__(self):
-        return Function(None, Operation.MLT, Function(func=lambda _:-1), self)
+        return Function(None, Operation.MLT, Function(func=lambda _:-1, label="-1"), self)
     
     def __call__(self, x):
         if Utilities.isNum(x): 
