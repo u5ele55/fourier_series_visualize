@@ -28,7 +28,7 @@ For N = 20 <br>
  ![x_sinxx_20](https://user-images.githubusercontent.com/99137907/210859021-549289d5-ff6e-4331-8181-864dd1efa63f.png)
  <br>
 ### f(x) = |x| ^ sin(x)
- ![image](https://user-images.githubusercontent.com/99137907/214660857-605cd238-7013-4fee-8110-db4368011dd8.png)
+ ![abs(x)^sinx](https://user-images.githubusercontent.com/99137907/214661663-65a53106-f03d-4a9b-afaf-5d1830b571fd.png)
  <br>
  
 ## Interaction
